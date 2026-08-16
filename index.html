@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>NITSON · Developer Portfolio</title>
+  <!-- Google Fonts (Inter + Space Grotesk) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Devicon (CDN) for tech logos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+  <style>
+    /* ============================================================
+       ROOT / VARIABLES (dark default)
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #050505;
+      --bg-secondary: #0A0F0E;
+      --bg-card: #0E1412;
+      --bg-glass: rgba(5, 5, 5, 0.68);
+      --accent: #00FFC6;
+      --accent-dark: #00A88A;
+      --accent-glow: rgba(0, 255, 198, 0.25);
+      --text-primary: #F5F5F5;
+      --text-muted: #8A8A8A;
+      --text-inverse: #0A0F0E;
+      --border-subtle: rgba(0, 255, 198, 0.15);
+      --shadow-glow: 0 8px 32px rgba(0, 255, 198, 0.08);
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'Space Grotesk', monospace;
+      --nav-bg: rgba(5, 5, 5, 0.7);
+      --nav-border: rgba(0, 255, 198, 0.08);
+      --slider-bg: #0B1110;
+      --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Light theme */
+    [data-theme="light"] {
+      --bg-primary: #F5F7F7;
+      --bg-secondary: #E8EEEC;
+      --bg-card: #FFFFFF;
+      --bg-glass: rgba(245, 247, 247, 0.8);
+      --accent: #00A88A;
+      --accent-dark: #007A64;
+      --accent-glow: rgba(0, 168, 138, 0.2);
+      --text-primary: #0A0F0E;
+      --text-muted: #3D4A47;
+      --text-inverse: #F5F5F5;
+      --border-subtle: rgba(0, 168, 138, 0.2);
+      --shadow-glow: 0 8px 32px rgba(0, 168, 138, 0.08);
+      --nav-bg: rgba(245, 247, 247, 0.75);
+      --nav-border: rgba(0, 168, 138, 0.12);
+      --slider-bg: #DCE6E2;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+      cursor: default;
+      position: relative;
+    }
+
+    /* ============================================================
+       STARFIELD BACKGROUND (canvas)
+       ============================================================ */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.6;
+      transition: opacity 0.6s ease;
+    }
+
+    [data-theme="light"] #starfield {
+      opacity: 0.25;
+    }
+
+    /* ============================================================
+       GLOBAL UTILITIES
+       ============================================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    section {
+      padding: 100px 0 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0, 255, 198, 0.06);
+      padding: 4px 14px;
+      border-radius: 40px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .section-title span {
+      color: var(--accent);
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      max-width: 600px;
+      font-size: 1.1rem;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR (desktop only)
+       ============================================================ */
+    @media (hover: hover) {
+      .custom-cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent);
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
+        z-index: 9999;
+        transition: width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
+        opacity: 0;
+      }
+
+      .custom-cursor.active {
+        opacity: 1;
+      }
+
+      .custom-cursor.hover {
+        width: 28px;
+        height: 28px;
+        background: var(--accent-dark);
+        mix-blend-mode: normal;
+        box-shadow: 0 0 24px var(--accent-glow);
+      }
+    }
+
+    /* ============================================================
+       HEADER / NAVIGATION
+       ============================================================ */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 16px 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--nav-border);
+      transition: var(--transition-smooth);
+    }
+
+    header.scrolled {
+      padding: 10px 0;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo i {
+      color: var(--accent);
+      font-size: 1.4rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      position: relative;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 1.5px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      border-radius: 40px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .lang-toggle {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      border-radius: 40px;
+      padding: 0 16px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      font-family: var(--font-mono);
+      letter-spacing: 0.5px;
+      gap: 6px;
+    }
+
+    .lang-toggle:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .lang-toggle i {
+      font-size: 0.9rem;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--text-primary);
+      transition: var(--transition-smooth);
+      border-radius: 4px;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* mobile nav */
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        max-width: 320px;
+        height: 100vh;
+        background: var(--bg-glass);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 28px;
+        transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border-left: 1px solid var(--border-subtle);
+        padding: 40px 20px;
+      }
+
+      .nav-links.open {
+        right: 0;
+      }
+
+      .nav-links a {
+        font-size: 1.2rem;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-actions .theme-toggle {
+        margin-right: 0;
+      }
+    }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 120px 0 80px;
+      overflow: hidden;
+    }
+
+    .hero-bg-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      top: -20%;
+      right: -10%;
+      filter: blur(80px);
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 255, 198, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 198, 0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      color: var(--accent);
+      background: rgba(0, 255, 198, 0.04);
+      padding: 6px 18px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 40px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 10vw, 6rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .hero-title .highlight {
+      color: var(--accent);
+      text-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .hero-real {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+      opacity: 0.7;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 34px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      background: transparent;
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--text-inverse);
+      border-color: var(--accent);
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 40px var(--accent-glow);
+    }
+
+    .btn-outline {
+      border-color: var(--border-subtle);
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: rgba(0, 255, 198, 0.04);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ============================================================
+       LANGUAGES & TECHNOLOGIES
+       ============================================================ */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .tech-card {
+      background: var(--bg-card);
+      padding: 30px 16px 24px;
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(4px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tech-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-glow), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--accent);
+      box-shadow: 0 16px 48px var(--accent-glow);
+    }
+
+    .tech-card:hover::before {
+      opacity: 0.08;
+    }
+
+    .tech-card i {
+      font-size: 3.2rem;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 12px;
+      transition: transform 0.3s;
+    }
+
+    .tech-card:hover i {
+      transform: scale(1.1);
+    }
+
+    .tech-card span {
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ============================================================
+       WHAT I BUILD
+       ============================================================ */
+    .build-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .build-card {
+      background: var(--bg-card);
+      padding: 32px 24px;
+      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .build-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 48px var(--accent-glow);
+    }
+
+    .build-card .icon {
+      font-size: 2.4rem;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .build-card h4 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .build-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .build-card .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      background: rgba(0, 255, 198, 0.08);
+      color: var(--accent);
+      padding: 2px 14px;
+      border-radius: 30px;
+      margin-top: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ============================================================
+       ABOUT
+       ============================================================ */
+    .about-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 540px;
+      margin-bottom: 20px;
+      min-height: 2.5em;
+    }
+
+    .about-text .highlight-name {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .stat-item {
+      background: var(--bg-card);
+      padding: 24px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .stat-item .number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+
+    .stat-item .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .about-wrap {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* ============================================================
+       CINEMATIC SLIDER
+       ============================================================ */
+    #showcase {
+      background: var(--slider-bg);
+      transition: background 0.3s;
+    }
+
+    .slider-wrapper {
+      position: relative;
+      margin-top: 30px;
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .slider-container {
+      position: relative;
+      height: 460px;
+      overflow: hidden;
+      border-radius: 28px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 52px;
+      opacity: 0;
+      transform: scale(0.96) translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      background: var(--bg-card);
+      border-radius: 28px;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, var(--accent-glow), transparent 70%);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .slide .slide-number {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .slide h3 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide p {
+      color: var(--text-muted);
+      max-width: 480px;
+      font-size: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide .slide-tag {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      background: rgba(0, 255, 198, 0.06);
+      padding: 4px 16px;
+      border-radius: 40px;
+      border: 1px solid var(--border-subtle);
+      color: var(--accent);
+      width: fit-content;
+      position: relative;
+      z-index: 2;
+    }
+
+    .slide .slide-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition-smooth);
+      position: relative;
+      z-index: 2;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 18px;
+      border-radius: 40px;
+      background: rgba(0, 255, 198, 0.04);
+      width: fit-content;
+    }
+
+    .slide .slide-link:hover {
+      background: var(--accent);
+      color: var(--text-inverse);
+      border-color: var(--accent);
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .slider-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .slider-arrows {
+      display: flex;
+      gap: 12px;
+    }
+
+    .slider-arrows button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider-arrows button:hover {
+      background: var(--accent);
+      color: var(--text-inverse);
+      border-color: var(--accent);
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .slider-progress {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      width: 120px;
+      height: 3px;
+      background: var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (max-width: 600px) {
+      .slider-container {
+        height: 420px;
+      }
+      .slide {
+        padding: 32px 24px;
+      }
+      .slider-controls {
+        flex-direction: column;
+        gap: 14px;
+        padding: 16px 20px;
+      }
+      .slider-progress {
+        width: 100%;
+        justify-content: center;
+      }
+      .progress-bar {
+        flex: 1;
+      }
+      .slide .slide-link {
+        font-size: 0.8rem;
+        padding: 4px 14px;
+      }
+    }
+
+    /* ============================================================
+       CONTACT
+       ============================================================ */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .contact-link {
+      background: var(--bg-card);
+      padding: 24px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      text-decoration: none;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transition-smooth);
+    }
+
+    .contact-link:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 40px var(--accent-glow);
+      background: var(--bg-secondary);
+    }
+
+    .contact-link i {
+      font-size: 1.8rem;
+      color: var(--accent);
+      width: 32px;
+      text-align: center;
+    }
+
+    .contact-link .info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-link .info .name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .contact-link .info .handle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    footer {
+      padding: 40px 0 30px;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    footer .footer-brand {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    footer .footer-tech {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin: 14px 0 10px;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    footer .footer-tech i {
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+
+    footer .footer-copy {
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       RESPONSIVE & MISC
+       ============================================================ */
+    @media (max-width: 480px) {
+      .hero-cta .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .build-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .slide {
+        transition: opacity 0.3s ease;
+        transform: none !important;
+      }
+    }
+
+    /* scroll reveal base */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       UTILITY : GLOW LINE
+       ============================================================ */
+    .glow-line {
+      width: 60px;
+      height: 2px;
+      background: var(--accent);
+      margin: 16px 0 20px;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* ============================================================
+       RTL (Persian) support
+       ============================================================ */
+    [dir="rtl"] {
+      text-align: right;
+    }
+
+    [dir="rtl"] .section-sub {
+      margin-right: 0;
+      margin-left: auto;
+    }
+
+    [dir="rtl"] .hero-content {
+      text-align: right;
+    }
+
+    [dir="rtl"] .hero-cta {
+      justify-content: flex-start;
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .btn {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .glow-line {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    [dir="rtl"] .about-text p {
+      text-align: right;
+    }
+
+    [dir="rtl"] .contact-link {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .slide {
+      text-align: right;
+    }
+
+    [dir="rtl"] .slide p {
+      margin-right: 0;
+      margin-left: auto;
+    }
+
+    [dir="rtl"] .slide .slide-tag {
+      margin-right: 0;
+      margin-left: auto;
+    }
+
+    [dir="rtl"] .slide .slide-link {
+      margin-right: 0;
+      margin-left: auto;
+    }
+
+    [dir="rtl"] .slider-progress {
+      flex-direction: row-reverse;
+    }
+
+    [dir="rtl"] .nav-links {
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      [dir="rtl"] .nav-links {
+        right: auto;
+        left: -100%;
+        border-left: none;
+        border-right: 1px solid var(--border-subtle);
+      }
+      [dir="rtl"] .nav-links.open {
+        right: auto;
+        left: 0;
+      }
+    }
+
+    /* ============================================================
+       TYPEWRITER ANIMATION
+       ============================================================ */
+    .typewriter {
+      display: inline;
+      overflow: hidden;
+      border-right: 2px solid var(--accent);
+      white-space: normal;
+      animation: blink-caret 0.75s step-end infinite;
+      min-height: 1.2em;
+    }
+
+    .typewriter.done {
+      border-right: none;
+      animation: none;
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    /* ============================================================
+       TITLE ANIMATIONS (glow on scroll)
+       ============================================================ */
+    .section-title {
+      transition: text-shadow 0.6s ease, color 0.6s ease;
+    }
+
+    .section-title.visible {
+      text-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    /* ============================================================
+       ENSURE MOBILE RESPONSIVENESS
+       ============================================================ */
+    @media (max-width: 768px) {
+      section {
+        padding: 70px 0 50px;
+      }
+      .hero-title {
+        font-size: clamp(2.8rem, 12vw, 4rem);
+      }
+      .hero-sub {
+        font-size: 1.1rem;
+      }
+      .about-text p {
+        font-size: 0.95rem;
+      }
+      .build-card {
+        padding: 24px 18px;
+      }
+      .contact-link {
+        padding: 18px 14px;
+        gap: 10px;
+      }
+      .contact-link i {
+        font-size: 1.4rem;
+        width: 28px;
+      }
+      .slide h3 {
+        font-size: 1.6rem;
+      }
+      .slide p {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .section-title {
+        font-size: 1.8rem;
+      }
+      .stat-item .number {
+        font-size: 1.6rem;
+      }
+      .stat-item {
+        padding: 16px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       STARFIELD BACKGROUND (Canvas)
+       ============================================================ -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Custom Cursor (desktop only) -->
+  <div class="custom-cursor" id="customCursor"></div>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header id="header">
+    <div class="nav-container">
+      <a href="#hero" class="logo"><i class="fas fa-code"></i> NITSON</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" data-key="nav-home">Home</a></li>
+        <li><a href="#skills" data-key="nav-skills">Skills</a></li>
+        <li><a href="#about" data-key="nav-about">About</a></li>
+        <li><a href="#showcase" data-key="nav-showcase">Showcase</a></li>
+        <li><a href="#contact" data-key="nav-contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" aria-label="Toggle language">
+          <i class="fas fa-globe"></i> <span id="langLabel">EN</span>
+        </button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-bg-glow"></div>
+    <div class="container hero-content">
+      <div class="hero-badge" data-key="hero-badge">✦ HELLO, I'M</div>
+      <h1 class="hero-title"><span class="highlight">NITSON</span></h1>
+      <div class="hero-sub" data-key="hero-sub">Game &amp; Web Developer</div>
+      <div class="hero-real" data-key="hero-real">Mohammad Hossein Heydari</div>
+      <div class="glow-line"></div>
+      <div class="hero-cta">
+        <a href="#showcase" class="btn btn-primary" data-key="hero-cta1"><i class="fas fa-arrow-right"></i> Explore My Work</a>
+        <a href="#contact" class="btn btn-outline" data-key="hero-cta2"><i class="fas fa-paper-plane"></i> Contact Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LANGUAGES & TECHNOLOGIES
+       ============================================================ -->
+  <section id="skills">
+    <div class="container">
+      <span class="section-label" data-key="skills-label">⚡ Expertise</span>
+      <h2 class="section-title" data-key="skills-title">Languages &amp; <span>Technologies</span></h2>
+      <p class="section-sub" data-key="skills-sub">Core technologies I work with daily to build digital experiences.</p>
+      <div class="tech-grid">
+        <div class="tech-card"><i class="devicon-csharp-plain"></i><span>C#</span></div>
+        <div class="tech-card"><i class="devicon-html5-plain"></i><span>HTML5</span></div>
+        <div class="tech-card"><i class="devicon-css3-plain"></i><span>CSS3</span></div>
+        <div class="tech-card"><i class="devicon-javascript-plain"></i><span>JavaScript</span></div>
+        <div class="tech-card"><i class="devicon-react-original"></i><span>React</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WHAT I BUILD
+       ============================================================ -->
+  <section id="build" style="padding-top:20px;">
+    <div class="container">
+      <span class="section-label" data-key="build-label">🛠️ Craft</span>
+      <h2 class="section-title" data-key="build-title">What I <span>Build</span></h2>
+      <p class="section-sub" data-key="build-sub">From immersive games to modern web interfaces — my stack in action.</p>
+      <div class="build-grid">
+        <div class="build-card">
+          <div class="icon"><i class="devicon-csharp-plain"></i></div>
+          <h4 data-key="build-card1-title">Unity Game Dev</h4>
+          <p data-key="build-card1-desc">Interactive 2D/3D experiences with C# and Unity engine.</p>
+          <span class="badge">C# · Unity</span>
+        </div>
+        <div class="build-card">
+          <div class="icon"><i class="devicon-html5-plain"></i><i class="devicon-css3-plain" style="margin-left:6px;"></i><i class="devicon-javascript-plain" style="margin-left:6px;"></i></div>
+          <h4 data-key="build-card2-title">Modern Websites</h4>
+          <p data-key="build-card2-desc">Responsive, performant frontends with a cinematic touch.</p>
+          <span class="badge">HTML · CSS · JS</span>
+        </div>
+        <div class="build-card">
+          <div class="icon"><i class="devicon-react-original"></i></div>
+          <h4 data-key="build-card3-title">Interactive Web Apps</h4>
+          <p data-key="build-card3-desc">Dynamic SPAs with React, state management and smooth UX.</p>
+          <span class="badge">React · Hooks · Router</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT
+       ============================================================ -->
+  <section id="about">
+    <div class="container">
+      <span class="section-label" data-key="about-label">👤 About</span>
+      <h2 class="section-title" data-key="about-title">About <span>Me</span></h2>
+      <div class="about-wrap">
+        <div class="about-text">
+          <p id="aboutText1" data-key="about-p1">
+            My name is <span class="highlight-name">Mohammad Hossein Heydari</span>, but I've always gone by 
+            <span class="highlight-name">NITSON</span> online — I don't really know why, I just love it. 
+            It's become my identity in the digital world.
+          </p>
+          <p id="aboutText2" data-key="about-p2">
+            I'm passionate about building dynamic, smart websites and I absolutely love game development. 
+            What drives me is creating things that stand out — I want every project I make to be different, 
+            unique, and unforgettable.
+          </p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;">
+            <span style="background:var(--bg-card); padding:4px 18px; border-radius:40px; border:1px solid var(--border-subtle); font-size:0.8rem;" data-key="about-tag1">⚡ Web Developer</span>
+            <span style="background:var(--bg-card); padding:4px 18px; border-radius:40px; border:1px solid var(--border-subtle); font-size:0.8rem;" data-key="about-tag2">🎮 Game Creator</span>
+            <span style="background:var(--bg-card); padding:4px 18px; border-radius:40px; border:1px solid var(--border-subtle); font-size:0.8rem;" data-key="about-tag3">🚀 Digital Builder</span>
+          </div>
+        </div>
+        <div class="about-stats">
+          <div class="stat-item"><div class="number">5+</div><div class="label" data-key="stat1">Technologies</div></div>
+          <div class="stat-item"><div class="number">∞</div><div class="label" data-key="stat2">Curiosity</div></div>
+          <div class="stat-item"><div class="number">100%</div><div class="label" data-key="stat3">Passion</div></div>
+          <div class="stat-item"><div class="number">NITSON</div><div class="label" data-key="stat4">Brand Identity</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CINEMATIC SLIDER
+       ============================================================ -->
+  <section id="showcase">
+    <div class="container">
+      <span class="section-label" data-key="showcase-label">🎬 Showcase</span>
+      <h2 class="section-title" data-key="showcase-title">My <span>Projects</span></h2>
+      <p class="section-sub" data-key="showcase-sub">A selection of my work — from games to web experiences.</p>
+
+      <div class="slider-wrapper">
+        <div class="slider-container" id="sliderContainer">
+          <!-- slide 1: Café Restaurant Gaff -->
+          <div class="slide active" data-index="0">
+            <div class="slide-bg"></div>
+            <div class="slide-number">01 / 04</div>
+            <h3 data-key="slide1-title">Café Restaurant Gaff</h3>
+            <p data-key="slide1-desc">A modern, cinematic website for a café restaurant with a unique atmosphere.</p>
+            <span class="slide-tag" data-key="slide1-tag">Web Design</span>
+            <a href="https://caferestaurant-gaff.vercel.app/" target="_blank" class="slide-link" data-key="slide1-link"><i class="fas fa-external-link-alt"></i> Visit Project</a>
+          </div>
+          <!-- slide 2: NITSON Driver -->
+          <div class="slide" data-index="1">
+            <div class="slide-bg"></div>
+            <div class="slide-number">02 / 04</div>
+            <h3 data-key="slide2-title">NITSON Driver</h3>
+            <p data-key="slide2-desc">A web-based driving game with immersive mechanics and smooth controls.</p>
+            <span class="slide-tag" data-key="slide2-tag">Web Game</span>
+            <a href="http://nitson-driver.vercel.app/" target="_blank" class="slide-link" data-key="slide2-link"><i class="fas fa-external-link-alt"></i> Play Game</a>
+          </div>
+          <!-- slide 3: NITSON Survival -->
+          <div class="slide" data-index="2">
+            <div class="slide-bg"></div>
+            <div class="slide-number">03 / 04</div>
+            <h3 data-key="slide3-title">NITSON Survival</h3>
+            <p data-key="slide3-desc">A survival game where you must fight, gather, and survive in a harsh world.</p>
+            <span class="slide-tag" data-key="slide3-tag">Web Game</span>
+            <a href="https://nitson-survival.vercel.app/" target="_blank" class="slide-link" data-key="slide3-link"><i class="fas fa-external-link-alt"></i> Play Game</a>
+          </div>
+          <!-- slide 4: NITSON Bird -->
+          <div class="slide" data-index="3">
+            <div class="slide-bg"></div>
+            <div class="slide-number">04 / 04</div>
+            <h3 data-key="slide4-title">NITSON Bird</h3>
+            <p data-key="slide4-desc">A fun and challenging bird-themed game with addictive gameplay.</p>
+            <span class="slide-tag" data-key="slide4-tag">Web Game</span>
+            <a href="https://nitson-game.vercel.app/" target="_blank" class="slide-link" data-key="slide4-link"><i class="fas fa-external-link-alt"></i> Play Game</a>
+          </div>
+        </div>
+
+        <div class="slider-controls">
+          <div class="slider-arrows">
+            <button id="prevSlide" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+            <button id="nextSlide" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="slider-progress">
+            <span id="slideCounter">01 / 04</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT
+       ============================================================ -->
+  <section id="contact">
+    <div class="container">
+      <span class="section-label" data-key="contact-label">📬 Connect</span>
+      <h2 class="section-title" data-key="contact-title">Let's <span>Connect</span></h2>
+      <p class="section-sub" data-key="contact-sub">You can reach me through any of the links below for ideas, development, or consulting.</p>
+      <div class="contact-grid" id="contactGrid">
+        <!-- filled from JS config -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <div class="container">
+      <div class="footer-brand">✦ NITSON</div>
+      <div class="footer-tech">
+        <span data-key="footer-built">Built with</span>
+        <i class="devicon-html5-plain" style="font-size:1.8rem;"></i>
+        <i class="devicon-css3-plain" style="font-size:1.8rem;"></i>
+        <i class="devicon-javascript-plain" style="font-size:1.8rem;"></i>
+      </div>
+      <div class="footer-copy" data-key="footer-copy">© 2026 NITSON. All rights reserved.</div>
+      <div style="margin-top:6px; font-size:0.75rem; opacity:0.5;" data-key="footer-dev">Developed by NITSON (this time for himself)</div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script>
+    // ============================================================
+    // STARFIELD BACKGROUND - lightweight canvas animation
+    // ============================================================
+    (function() {
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let stars = [];
+      const NUM_STARS = 180;
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < NUM_STARS; i++) {
+          stars.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 1.2 + 0.3,
+            speed: Math.random() * 0.015 + 0.005,
+            opacity: Math.random() * 0.6 + 0.2,
+            driftX: (Math.random() - 0.5) * 0.2,
+            driftY: (Math.random() - 0.5) * 0.2
+          });
+        }
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, width, height);
+        
+        for (const star of stars) {
+          // Update position with slow drift
+          star.x += star.driftX + star.speed * 0.1;
+          star.y += star.driftY + star.speed * 0.05;
+          
+          // Wrap around edges
+          if (star.x > width) star.x = 0;
+          if (star.x < 0) star.x = width;
+          if (star.y > height) star.y = 0;
+          if (star.y < 0) star.y = height;
+          
+          // Twinkle effect
+          const twinkle = Math.sin(Date.now() * star.speed * 3 + star.x) * 0.2 + 0.8;
+          const opacity = star.opacity * twinkle;
+          
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+          ctx.fill();
+          
+          // Small glow for some stars
+          if (star.radius > 1) {
+            ctx.shadowColor = 'rgba(0, 255, 198, 0.05)';
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        }
+      }
+
+      function animate() {
+        drawStars();
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        createStars();
+      });
+
+      resize();
+      createStars();
+      animate();
+
+      // Update star opacity based on theme
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        const observer = new MutationObserver(() => {
+          const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          canvas.style.opacity = isLight ? '0.25' : '0.6';
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      }
+    })();
+
+    // ============================================================
+    // CONFIGURATION – update with your real data
+    // ============================================================
+    const siteConfig = {
+      name: "NITSON",
+      realName: "Mohammad Hossein Heydari",
+      github: "https://github.com/n1ts0n",
+      telegram: "https://t.me/sn0wknight",
+      instagram: "https://www.instagram.com/nitsoon_?igsh=bDAwams0azIxa2k2",
+      linkedin: "https://www.linkedin.com/in/%D9%85%D8%AD%D9%85%D8%AF%D8%AD%D8%B3%DB%8C%D9%86-%D8%AD%DB%8C%D8%AF%D8%B1%DB%8C-86b770351?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      email: "YOUR_EMAIL"
+    };
+
+    // ============================================================
+    // TRANSLATIONS (English & Persian)
+    // ============================================================
+    const translations = {
+      en: {
+        "nav-home": "Home",
+        "nav-skills": "Skills",
+        "nav-about": "About",
+        "nav-showcase": "Showcase",
+        "nav-contact": "Contact",
+        "hero-badge": "✦ HELLO, I'M",
+        "hero-sub": "Game & Web Developer",
+        "hero-real": "Mohammad Hossein Heydari",
+        "hero-cta1": "Explore My Work",
+        "hero-cta2": "Contact Me",
+        "skills-label": "⚡ Expertise",
+        "skills-title": "Languages & Technologies",
+        "skills-sub": "Core technologies I work with daily to build digital experiences.",
+        "build-label": "🛠️ Craft",
+        "build-title": "What I Build",
+        "build-sub": "From immersive games to modern web interfaces — my stack in action.",
+        "build-card1-title": "Unity Game Dev",
+        "build-card1-desc": "Interactive 2D/3D experiences with C# and Unity engine.",
+        "build-card2-title": "Modern Websites",
+        "build-card2-desc": "Responsive, performant frontends with a cinematic touch.",
+        "build-card3-title": "Interactive Web Apps",
+        "build-card3-desc": "Dynamic SPAs with React, state management and smooth UX.",
+        "about-label": "👤 About",
+        "about-title": "About Me",
+        "about-p1": 'My name is <span class="highlight-name">Mohammad Hossein Heydari</span>, but I\'ve always gone by <span class="highlight-name">NITSON</span> online — I don\'t really know why, I just love it. It\'s become my identity in the digital world.',
+        "about-p2": "I'm passionate about building dynamic, smart websites and I absolutely love game development. What drives me is creating things that stand out — I want every project I make to be different, unique, and unforgettable.",
+        "about-tag1": "⚡ Web Developer",
+        "about-tag2": "🎮 Game Creator",
+        "about-tag3": "🚀 Digital Builder",
+        "stat1": "Technologies",
+        "stat2": "Curiosity",
+        "stat3": "Passion",
+        "stat4": "Brand Identity",
+        "showcase-label": "🎬 Showcase",
+        "showcase-title": "My Projects",
+        "showcase-sub": "A selection of my work — from games to web experiences.",
+        "slide1-title": "Café Restaurant Gaff",
+        "slide1-desc": "A modern, cinematic website for a café restaurant with a unique atmosphere.",
+        "slide1-tag": "Web Design",
+        "slide1-link": "Visit Project",
+        "slide2-title": "NITSON Driver",
+        "slide2-desc": "A web-based driving game with immersive mechanics and smooth controls.",
+        "slide2-tag": "Web Game",
+        "slide2-link": "Play Game",
+        "slide3-title": "NITSON Survival",
+        "slide3-desc": "A survival game where you must fight, gather, and survive in a harsh world.",
+        "slide3-tag": "Web Game",
+        "slide3-link": "Play Game",
+        "slide4-title": "NITSON Bird",
+        "slide4-desc": "A fun and challenging bird-themed game with addictive gameplay.",
+        "slide4-tag": "Web Game",
+        "slide4-link": "Play Game",
+        "contact-label": "📬 Connect",
+        "contact-title": "Let's Connect",
+        "contact-sub": "You can reach me through any of the links below for ideas, development, or consulting.",
+        "footer-built": "Built with",
+        "footer-copy": "© 2026 NITSON. All rights reserved.",
+        "footer-dev": "Developed by NITSON (this time for himself)"
+      },
+      fa: {
+        "nav-home": "خانه",
+        "nav-skills": "مهارت‌ها",
+        "nav-about": "درباره من",
+        "nav-showcase": "نمونه کارها",
+        "nav-contact": "تماس",
+        "hero-badge": "✦ سلام، این منم",
+        "hero-sub": "توسعه‌دهنده بازی و وب",
+        "hero-real": "محمدحسین حیدری",
+        "hero-cta1": "مشاهده کارهای من",
+        "hero-cta2": "تماس با من",
+        "skills-label": "⚡ تخصص‌ها",
+        "skills-title": "زبان‌ها و فناوری‌ها",
+        "skills-sub": "فناوری‌های اصلی که روزانه برای ساخت تجربه‌های دیجیتال از آن‌ها استفاده می‌کنم.",
+        "build-label": "🛠️ دست‌ساخته‌ها",
+        "build-title": "چیزی که می‌سازم",
+        "build-sub": "از بازی‌های فراگیر تا رابط‌های وب مدرن — استک من در عمل.",
+        "build-card1-title": "توسعه بازی با یونیتی",
+        "build-card1-desc": "تجربه‌های تعاملی ۲ بعدی و ۳ بعدی با سی‌شارپ و موتور یونیتی.",
+        "build-card2-title": "وب‌سایت‌های مدرن",
+        "build-card2-desc": "فرانت‌اندهای ریسپانسیو و کارا با ظاهری سینمایی.",
+        "build-card3-title": "اپلیکیشن‌های وب تعاملی",
+        "build-card3-desc": "SPAهای پویا با ریکت، مدیریت وضعیت و تجربه کاربری روان.",
+        "about-label": "👤 درباره من",
+        "about-title": "درباره من",
+        "about-p1": 'اسم من <span class="highlight-name">محمدحسین حیدری</span> هست، ولی از اول توی فضای مجازی اسمم رو <span class="highlight-name">NITSON</span> گذاشتم — نمیدونم چرا ولی دوسش دارم. این اسم به هویت من در دنیای دیجیتال تبدیل شده.',
+        "about-p2": "من به ساخت وب‌سایت‌های پویا و هوشمند علاقه دارم و در کنارش ساخت بازی رو خیلی دوست دارم. چیزی که من رو به جلو می‌بره اینه که چیزی که می‌سازم با بقیه فرق کنه — می‌خوام هر پروژه‌ای که می‌سازم متفاوت، خاص و به‌یادماندنی باشه.",
+        "about-tag1": "⚡ توسعه‌دهنده وب",
+        "about-tag2": "🎮 سازنده بازی",
+        "about-tag3": "🚀 سازنده دیجیتال",
+        "stat1": "فناوری‌ها",
+        "stat2": "کنجکاوی",
+        "stat3": "اشتیاق",
+        "stat4": "هویت برند",
+        "showcase-label": "🎬 نمونه کارها",
+        "showcase-title": "پروژه‌های من",
+        "showcase-sub": "انتخابی از کارهای من — از بازی‌ها تا تجربه‌های وب.",
+        "slide1-title": "کافه رستوران گاف",
+        "slide1-desc": "وب‌سایتی مدرن و سینمایی برای یک کافه رستوران با فضایی منحصر‌به‌فرد.",
+        "slide1-tag": "طراحی وب",
+        "slide1-link": "مشاهده پروژه",
+        "slide2-title": "NITSON Driver",
+        "slide2-desc": "یک بازی رانندگی تحت وب با مکانیک‌های فراگیر و کنترل‌های روان.",
+        "slide2-tag": "بازی وب",
+        "slide2-link": "بازی کنید",
+        "slide3-title": "NITSON Survival",
+        "slide3-desc": "یک بازی بقا که در آن باید بجنگی، جمع‌آوری کنی و در دنیایی سخت زنده بمونی.",
+        "slide3-tag": "بازی وب",
+        "slide3-link": "بازی کنید",
+        "slide4-title": "NITSON Bird",
+        "slide4-desc": "یک بازی سرگرم‌کننده و چالش‌برانگیز با تم پرنده و گیم‌پلی اعتیادآور.",
+        "slide4-tag": "بازی وب",
+        "slide4-link": "بازی کنید",
+        "contact-label": "📬 ارتباط",
+        "contact-title": "بیایید ارتباط برقرار کنیم",
+        "contact-sub": "از طریق هرکدوم از لینک‌های زیر می‌تونین برای ایده، ساخت یا مشاوره با من در تماس باشین.",
+        "footer-built": "ساخته شده با",
+        "footer-copy": "© ۲۰۲۶ NITSON. تمامی حقوق محفوظ است.",
+        "footer-dev": "توسعه توسط NITSON (این بار برای خودش)"
+      }
+    };
+
+    // ============================================================
+    // CONTACT LINKS (auto-generated)
+    // ============================================================
+    const contactData = [
+      { icon: "fab fa-github", name: "GitHub", handle: "@n1ts0n", url: siteConfig.github },
+      { icon: "fab fa-telegram-plane", name: "Telegram", handle: "@sn0wknight", url: siteConfig.telegram },
+      { icon: "fab fa-instagram", name: "Instagram", handle: "@nitsoon_", url: siteConfig.instagram },
+      { icon: "fab fa-linkedin-in", name: "LinkedIn", handle: "Mohammad Hossein", url: siteConfig.linkedin }
+    ];
+
+    const contactGrid = document.getElementById('contactGrid');
+    contactData.forEach(item => {
+      const a = document.createElement('a');
+      a.className = 'contact-link';
+      a.href = item.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.innerHTML = `
+        <i class="${item.icon}"></i>
+        <div class="info">
+          <span class="name">${item.name}</span>
+          <span class="handle">${item.handle}</span>
+        </div>
+      `;
+      contactGrid.appendChild(a);
+    });
+
+    // ============================================================
+    // LANGUAGE TOGGLE
+    // ============================================================
+    let currentLang = localStorage.getItem('lang') || 'en';
+    const langToggle = document.getElementById('langToggle');
+    const langLabel = document.getElementById('langLabel');
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang === 'fa' ? 'fa' : 'en';
+      document.documentElement.dir = lang === 'fa' ? 'rtl' : 'ltr';
+      localStorage.setItem('lang', lang);
+      langLabel.textContent = lang.toUpperCase();
+
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (translations[lang] && translations[lang][key] !== undefined) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = translations[lang][key];
+          } else {
+            el.innerHTML = translations[lang][key];
+          }
+        }
+      });
+
+      if (typewriterObserver) {
+        typewriterObserver.disconnect();
+        initTypewriter();
+      }
+    }
+
+    langToggle.addEventListener('click', () => {
+      const nextLang = currentLang === 'en' ? 'fa' : 'en';
+      setLanguage(nextLang);
+    });
+
+    // ============================================================
+    // THEME TOGGLE + localStorage
+    // ============================================================
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    let currentTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeIcon(currentTheme);
+
+    function updateThemeIcon(theme) {
+      themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    });
+
+    // ============================================================
+    // MOBILE MENU
+    // ============================================================
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // ============================================================
+    // HEADER SCROLL EFFECT
+    // ============================================================
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ============================================================
+    // SCROLL REVEAL (IntersectionObserver)
+    // ============================================================
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -20px 0px' });
+
+    document.querySelectorAll(
+      '.tech-card, .build-card, .stat-item, .contact-link, .section-title, .section-sub, .section-label'
+    ).forEach(el => {
+      el.classList.add('reveal');
+      observer.observe(el);
+    });
+
+    // ============================================================
+    // TYPEWRITER EFFECT FOR ABOUT TEXT
+    // ============================================================
+    let typewriterObserver;
+
+    function initTypewriter() {
+      const aboutText1 = document.getElementById('aboutText1');
+      const aboutText2 = document.getElementById('aboutText2');
+      
+      const originalHTML1 = aboutText1.innerHTML;
+      const originalHTML2 = aboutText2.innerHTML;
+      
+      const tempDiv1 = document.createElement('div');
+      tempDiv1.innerHTML = originalHTML1;
+      const text1 = tempDiv1.textContent || tempDiv1.innerText;
+      
+      const tempDiv2 = document.createElement('div');
+      tempDiv2.innerHTML = originalHTML2;
+      const text2 = tempDiv2.textContent || tempDiv2.innerText;
+
+      let typed1 = false;
+      let typed2 = false;
+
+      aboutText1.innerHTML = '';
+      aboutText2.innerHTML = '';
+
+      const typeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!typed1) {
+              typed1 = true;
+              typeWriter(aboutText1, text1, originalHTML1, 0, () => {
+                if (!typed2) {
+                  typed2 = true;
+                  setTimeout(() => {
+                    typeWriter(aboutText2, text2, originalHTML2, 0);
+                  }, 300);
+                }
+              });
+            }
+          }
+        });
+      }, { threshold: 0.2 });
+
+      typewriterObserver = typeObserver;
+      typeObserver.observe(aboutText1);
+      typeObserver.observe(aboutText2);
+    }
+
+    function typeWriter(element, text, originalHTML, index, callback) {
+      if (index === 0) {
+        element.innerHTML = '';
+        element.classList.add('typewriter');
+      }
+      
+      if (index < text.length) {
+        let currentText = text.substring(0, index + 1);
+        
+        if (originalHTML.includes('highlight-name')) {
+          if (currentText.includes('Mohammad Hossein Heydari') && !currentText.includes('<span')) {
+            const parts = currentText.split('Mohammad Hossein Heydari');
+            currentText = parts[0] + '<span class="highlight-name">Mohammad Hossein Heydari</span>' + parts.slice(1).join('Mohammad Hossein Heydari');
+          }
+          if (currentText.includes('NITSON') && !currentText.includes('<span')) {
+            const parts = currentText.split('NITSON');
+            currentText = parts[0] + '<span class="highlight-name">NITSON</span>' + parts.slice(1).join('NITSON');
+          }
+          if (currentText.includes('محمدحسین حیدری') && !currentText.includes('<span')) {
+            const parts = currentText.split('محمدحسین حیدری');
+            currentText = parts[0] + '<span class="highlight-name">محمدحسین حیدری</span>' + parts.slice(1).join('محمدحسین حیدری');
+          }
+          if (currentText.includes('NITSON') && !currentText.includes('<span')) {
+            const parts = currentText.split('NITSON');
+            currentText = parts[0] + '<span class="highlight-name">NITSON</span>' + parts.slice(1).join('NITSON');
+          }
+        }
+        
+        element.innerHTML = currentText;
+        index++;
+        setTimeout(() => typeWriter(element, text, originalHTML, index, callback), 25);
+      } else {
+        element.innerHTML = originalHTML;
+        element.classList.remove('typewriter');
+        element.classList.add('done');
+        if (callback) callback();
+      }
+    }
+
+    // ============================================================
+    // CINEMATIC SLIDER
+    // ============================================================
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    const slideCounter = document.getElementById('slideCounter');
+    const progressFill = document.getElementById('progressFill');
+    let currentSlide = 0;
+    let slideInterval;
+
+    function goToSlide(index) {
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === index);
+      });
+      currentSlide = index;
+      slideCounter.textContent = `${String(index+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
+      progressFill.style.width = `${((index+1) / slides.length) * 100}%`;
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+
+    prevBtn.addEventListener('click', () => { resetAutoPlay(); prevSlide(); });
+    nextBtn.addEventListener('click', () => { resetAutoPlay(); nextSlide(); });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { resetAutoPlay(); prevSlide(); }
+      if (e.key === 'ArrowRight') { resetAutoPlay(); nextSlide(); }
+    });
+
+    let touchStartX = 0, touchEndX = 0;
+    const sliderContainer = document.getElementById('sliderContainer');
+    sliderContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    sliderContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        resetAutoPlay();
+        if (diff > 0) nextSlide(); else prevSlide();
+      }
+    }, { passive: true });
+
+    function startAutoPlay() {
+      if (slideInterval) clearInterval(slideInterval);
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    function resetAutoPlay() {
+      clearInterval(slideInterval);
+      startAutoPlay();
+    }
+
+    const sliderWrapper = document.querySelector('.slider-wrapper');
+    sliderWrapper.addEventListener('mouseenter', () => clearInterval(slideInterval));
+    sliderWrapper.addEventListener('mouseleave', startAutoPlay);
+
+    goToSlide(0);
+    startAutoPlay();
+
+    // ============================================================
+    // CUSTOM CURSOR (desktop only)
+    // ============================================================
+    const cursor = document.getElementById('customCursor');
+
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        cursor.classList.add('active');
+      });
+
+      const interactive = document.querySelectorAll('a, button, .tech-card, .build-card, .contact-link, .btn');
+      interactive.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      document.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+    } else {
+      cursor.style.display = 'none';
+    }
+
+    // ============================================================
+    // SMOOTH SCROLL
+    // ============================================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          const offsetTop = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ============================================================
+    // INIT – set initial language and typewriter
+    // ============================================================
+    setLanguage(currentLang);
+    setTimeout(initTypewriter, 300);
+
+    console.log('🚀 NITSON Portfolio ready. ✦');
+  </script>
+</body>
+</html>
